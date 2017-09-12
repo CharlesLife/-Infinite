@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<div class="wrap">
+			<img id="outside">
+			<div id="my-id">
+		    	<img id="inside">
+		    	<div class="lonely"></div>
+		   		<div class="outer">
+		        	<div class="inner"></div>
+		    	</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+	window.onload =function(){
+		var list1 = document.querySelectorAll("#my-id div div").length;
+		var list2 = document.querySelector("#my-id").querySelectorAll("div div").length;
+		console.log(list1);
+		console.log(list2);
+	}
+		
+	</script>
+</html>
