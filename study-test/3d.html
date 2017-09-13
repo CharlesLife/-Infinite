@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D正体方</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+        }
+        body{
+            perspective: 550px;
+        }
+        ul{
+            width: 200px;
+            height:200px;
+            margin:100px auto;
+            position: relative;
+            transform-style: preserve-3d;
+            transform:rotateY(0deg) rotateX(0deg);
+            animation: yun 5s linear 0s infinite normal;
+        }
+        ul li{
+            width:200px;
+            height:200px;
+            list-style:none;
+            font-size: 60px;
+            text-align: center;
+            line-height:200px;
+            position: absolute;
+            top:0;
+            left:0;
+        }
+        ul li:nth-child(1){
+            background-color:red;
+            transform:translateX(-100px) rotateY(90deg)
+            ;
+        }
+        ul li:nth-child(2){
+            background-color:green;
+            transform:translateX(100px) rotateY(90deg)
+        ;
+        }
+        ul li:nth-child(3){
+            background-color:pink;
+            transform:translateY(100px) rotateX(-90deg);
+        }
+        ul li:nth-child(4){
+            background-color:yellow;
+            transform:translateY(-100px) rotateX(90deg);
+        }
+        ul li:nth-child(5){
+            background-color:blue;
+            transform:translateZ(100px)
+            ;
+        }
+        ul li:nth-child(6){
+            background-color:skyblue;
+            transform:translateZ(-100px) rotateX(180deg);
+            ;
+        }
+        @keyframes yun {
+            from{
+                transform: rotateX(0deg);
+            }
+            to{
+                transform: rotateX(360deg);
+            }
+        }
+        img{
+            width:400px;
+            height:200px;
+        }
+    </style>
+</head>
+<body>
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+    <li>4</li>
+    <li>5</li>
+    <li>6</li>
+</ul>
+</body>
+</html>
