@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			html,body{
+				height: 100%;
+				overflow: hidden;
+			}
+			#wrap{
+				height: 100%;
+				overflow: hidden;
+				background:gray;
+			}
+			#wrap #inner{
+				position: absolute;
+				top:50%;
+				left:50%;
+				transform: translate3d(-50%,-50%,0);
+			}
+			#wrap #inner > span{
+				position: relative;
+				
+				
+			}
+			@keyframes move{
+				from{
+					top:0;
+				}
+				to{
+					top:-12px;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<div id="inner">
+				<span>H</span>		
+				<span>E</span>			
+				<span>L</span>			
+				<span>L</span>			
+				<span>O</span>			
+				<span>W</span>
+				<span>O</span>			
+				<span>R</span>			
+				<span>L</span>			
+				<span>D</span>			
+				<span>!</span>		
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		window.onload = function(){
+			var list = document.querySelectorAll("#inner span");
+			var color =["red","orange","yellow","green","blue","magenta","deeppink"];
+			for(var i=0;i<list.length;i++){
+				list[i].style.color = color[i%list.length];
+				list[i].style.animation = 'move .5s '+ (i*.1) +'s infinite linear alternate';
+			}
+		}
+	</script>
+</html>
