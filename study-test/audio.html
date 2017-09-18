@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>audio-list</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background: #F4F4EA;
+			}
+			ul{
+				list-style: none;
+			}
+			a{
+				text-decoration: none;
+				display: block;
+				color: #000000;
+			}
+			#wrap{
+				width: 910px;
+				height: 38px;
+				border: 1px solid gray;
+				margin: 200px auto;
+				border-right: none ;
+			}
+			#wrap .list{
+				overflow: hidden;
+				height: 100%;
+			}
+			#wrap .list>li{
+				float: left;
+				width: 100px;
+				height: 100%;
+				text-align: center;
+				line-height: 38px;
+				border-right:1px solid gray ;
+				
+			}
+			
+			#wrap .list>li .block{
+				width: 100px;
+				height: 38px;
+				background: aquamarine;
+				transition: .5s transform;
+			}
+			#wrap .list>li:hover .block{
+				transform: translateY(-38px);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<ul class="list">
+				<li flag="a">
+					<a href="javascript:;">我的主页</a>
+					<div class="block"></div>
+				</li>
+				<li flag="b">
+					<a href="javascript:;">新闻头条</a>
+					<div class="block"></div>
+				</li>
+				<li flag="c">
+					<a href="javascript:;">电视剧</a>
+					<div class="block"></div>
+				</li>
+				<li flag="d">
+					<a href="javascript:;">最新电影</a>
+					<div class="block"></div>
+				</li>
+				<li flag="e">
+					<a href="javascript:;">娱乐八卦</a>
+					<div class="block"></div>
+				</li>
+				<li flag="f">
+					<a href="javascript:;">小说大全</a>
+					<div class="block"></div>
+				</li>
+				<li flag="g">
+					<a href="javascript:;">今日团购</a>
+					<div class="block"></div>
+				</li>
+				<li flag="b">
+					<a href="javascript:;">旅游度假</a>
+					<div class="block"></div>
+				</li>
+				<li flag="c">
+					<a href="javascript:;">精品订购</a>
+					<div class="block"></div>
+				</li>
+			</ul>	
+			<audio ></audio>
+		</div>
+	</body>
+	<script type="text/javascript">
+	window.onload = function(){
+		var list = document.querySelectorAll("#wrap .list li");
+		var audioA = document.querySelector("#wrap audio");
+		
+		for(var i=0;i<list.length;i++){
+			list[i].onmouseenter = function(){
+				var flag = this.getAttribute("flag");
+				if(flag){
+						audioA.src="http://s8.qhimg.com/share/audio/piano1/"+flag+"4.mp3";
+						audioA.play();
+					}
+			}
+		}
+	}
+		
+	</script>
+</html>
