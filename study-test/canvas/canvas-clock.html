@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>canvas-clock</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background: gray;
+			}
+			canvas{
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				margin: auto;
+				background: white;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas width="500" height="500"></canvas>
+	</body>
+	<script type="text/javascript">
+		window.onload=function(){
+			var canvas = document.querySelector("canvas");
+			var flag = 0;
+			if(canvas.getContext){
+				var ctx = canvas.getContext("2d");
+				
+				
+				
+				setInterval(function (){
+					ctx.clearRect(0,0,canvas.width,canvas.height);
+					move();
+				},1000)
+				
+				function move(){
+					//初始化
+				ctx.save();
+				ctx.translate(250,250);
+				ctx.scale(0.5,0.5);
+				ctx.rotate(-90*Math.PI/180);
+				ctx.lineWidth = 8;
+				ctx.strokeStyle = "black";
+				ctx.lineCap = "round";
+				ctx.beginPath();
+				//外层表盘
+				ctx.save();
+				ctx.strokeStyle = "#325FA2";
+				ctx.lineWidth = 14;
+				ctx.beginPath();
+				ctx.arc(0,0,140,0,360*Math.PI/180);
+				ctx.stroke();
+				ctx.restore();
+				//时针刻度
+				ctx.save();
+				for(var i=0;i<12;i++){
+					ctx.beginPath();
+					ctx.moveTo(100,0);
+					ctx.lineTo(120,0);
+					ctx.stroke();
+					ctx.rotate(30*Math.PI/180);
+				}
+				ctx.restore();
+				//分针刻度
+				ctx.save();
+				ctx.lineWidth = 4;
+				for(var i=0;i<60;i++){
+					if(i%5 != 0){
+						ctx.beginPath();
+						ctx.moveTo(117,0);
+						ctx.lineTo(120,0);
+						ctx.stroke();
+					}
+					ctx.rotate(6*Math.PI/180);
+				}
+				ctx.restore();
+				//当前时间
+				var date = new Date();
+				var s = date.getSeconds();
+				var m = date.getMinutes();
+				var h = date.getHours();
+				h = h > 12 ? h-12 : h;
+				
+				//时针
+				ctx.save();
+				ctx.rotate(30*h*Math.PI/180);
+				ctx.lineWidth = 12;
+				ctx.strokeStyle = "blue";
+				ctx.beginPath();
+				ctx.moveTo(-20,0);
+				ctx.lineTo(60,0);
+				ctx.stroke();
+				ctx.restore();
+				//分针
+				ctx.save();
+				ctx.rotate(6*m*Math.PI/180);
+				ctx.lineWidth = 8;
+				ctx.strokeStyle = "yellow";
+				ctx.beginPath();
+				ctx.moveTo(-28,0);
+				ctx.lineTo(90,0);
+				ctx.stroke();
+				ctx.restore();
+				//秒针
+				ctx.save();
+				ctx.rotate(6*s*Math.PI/180);
+				ctx.lineWidth = 4;
+				ctx.strokeStyle="red";
+				ctx.fillStyle="red";
+					//秒针
+					ctx.beginPath();
+					ctx.moveTo(-30,0);
+					ctx.lineTo(83,0);
+					ctx.stroke();
+					//中心
+					ctx.beginPath();
+					ctx.arc(0,0,10,0,2*Math.PI);
+					ctx.fill();
+					//针头
+					ctx.beginPath();
+					ctx.moveTo(83,0);
+					ctx.lineTo(83,10);
+					ctx.lineTo(103,0);
+					ctx.lineTo(83,-10);
+					ctx.lineTo(83,0);
+					ctx.stroke();
+					
+				ctx.restore();
+				
+				ctx.restore();
+				}
+				
+				setInterval(function(){
+					
+					flag++;
+					if(flag > 8){
+						flag = 1;
+//						ctx.clearRect(0,0,canvas.width,canvas.height);
+					}
+					
+					var img = new Image();
+					img.src = "q_r"+flag+".jpg";
+					img.onload = function(){
+						draw(img);
+					}
+					
+					function draw(img){
+					ctx.drawImage(img,0,0)
+					}
+				},100)
+			}
+			
+			
+		}
+	</script>
+</html>
