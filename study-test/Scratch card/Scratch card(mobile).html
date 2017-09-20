@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--移动端初始化-->
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+		<title>刮刮卡</title>
+			<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			html,body{
+				height: 100%;
+				overflow: hidden;
+			}
+			#wrap{
+				height: 100%;
+				overflow: hidden;
+			}
+			#wrap ul{
+				height: 100%;
+			}
+			#wrap ul li{
+				height: 100%;
+				background:url(b.png) no-repeat;
+				background-size:100% 100%;
+			}
+			#wrap>canvas{
+				position: absolute;
+				top: 0;
+				left: 0;
+				transition: 1s opacity;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrap">
+			<canvas></canvas>
+			<ul>
+				<li></li>
+			</ul>
+			
+		</div>
+	</body>
+	<script type="text/javascript">
+		window.onload=function(){
+			var oc = document.querySelector("canvas");
+			oc.width = document.documentElement.clientWidth;
+			oc.height = document.documentElement.clientHeight;
+			if(oc.getContext){
+				var ctx = oc.getContext("2d");
+				var img = new Image();
+				img.src = "a.png";
+				img.onload = function(){
+					draw(this);
+				}
+				
+			}
+			
+			function draw(img){
+//				设置图片宽高
+				ctx.drawImage(img,0,0,oc.width,oc.height);
+//				设置触屏事件
+				oc.addEventListener("touchstart",function(ev){
+					ev = ev || event;
+					var touchC = ev.changedTouches[0];
+					var x = touchC.clientX - oc.offsetLeft;
+					var y = touchC.clientY - oc.offsetTop;
+//				原理:合成,让相交部分显示，点击时绘制圆
+//					利用lineCap画圆,并设置线宽
+					ctx.globalCompositeOperation = "destination-out";
+					ctx.lineWidth = 35;
+					ctx.lineCap = "round";
+					ctx.beginPath();
+					ctx.moveTo(x,y);
+					ctx.lineTo(x,y);
+					ctx.stroke();
+				})
+				//设置手指滑动事件
+				oc.addEventListener("touchmove",function(ev){
+					ev = ev || event;
+					var touchC = ev.changedTouches[0];
+					var x = touchC.clientX - oc.offsetLeft;
+					var y = touchC.clientY - oc.offsetTop;
+					ctx.lineTo(x+1,y+1);
+					ctx.stroke();
+				})
+				
+				//设置手指抬起后的事件,如果刮的区域超过一半则显示全部
+				oc.addEventListener("touchend",function(){
+					//获取区域内像素
+					var imgData = ctx.getImageData(0,0,oc.width,oc.height);
+					var allPX = imgData.width * imgData.height;
+					
+					//设置计数器
+					var flag = 0;
+					//循环遍历所有像素，如果第4个数字等于0（即透明重合部分），计数器+1；
+					for(var i=0;i<allPX;i++){
+						if(imgData.data[4*i+3] == 0){
+							flag++;
+						}
+					}
+					//如果重合部分大于一半的像素则完全透明
+					if(flag > allPX/2){
+						oc.style.opacity = 0;
+					}
+					
+				})
+				//当canvas完全透明后移除；
+				oc.addEventListener("transitionend",function(){
+					this.remove();
+				})
+				
+			}
+			
+		//由于之前用画圆的方式实现会出现一个严重的问题：滑动速度过快导致浏览器渲染速度跟不上，出现单个独立的圆；
+		//这里利用画线的方式，巧妙设置线的样式（lineCap,lineWidth）达到点击画圆的效果，而且滑速再快不会出现断点。
+			
+			
+		}
+	</script>
+</html>
