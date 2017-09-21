@@ -52,6 +52,7 @@
 				var ctx = oc.getContext("2d");
 				var img = new Image();
 				img.src = "a.png";
+				img.crossOrigin = "Anonymous";
 				img.onload = function(){
 					draw(this);
 				}
