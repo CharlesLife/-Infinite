@@ -72,6 +72,7 @@
 					ctx.globalCompositeOperation = "destination-out";
 					ctx.lineWidth = 35;
 					ctx.lineCap = "round";
+					ctx.lineJoin = "round";//修复尖角问题
 					ctx.beginPath();
 					ctx.moveTo(x,y);
 					ctx.lineTo(x,y);
