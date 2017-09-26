@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			body{
+				background: gray;
+			}
+			canvas{
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				margin: auto;
+				background: white;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas width="400" height="400"></canvas>
+	</body>
+	<script type="text/javascript">
+		window.onload=function(){
+			var oc = document.querySelector("canvas");
+			if(oc.getContext){
+				var ctx = oc.getContext("2d");
+				var arr = [];
+				
+//				数据生成
+				setInterval(function(){
+					var x = Math.round(Math.random()*oc.width);
+					var y = Math.round(Math.random()*oc.height);
+					var z = 10;
+					
+					var r = Math.round(Math.random()*255);
+					var g = Math.round(Math.random()*255);
+					var b = Math.round(Math.random()*255);
+					var a = 1;
+					
+					var startX = x;
+					var startY = y;
+					var deg = 0;
+					var num = Math.round(Math.random()*30)+30;
+					
+					arr.push({
+						x:x,
+						y:y,
+						z:z,
+						
+						r:r,
+						g:g,
+						b:b,
+						a:a,
+						startX:startX,
+						startY:startY,
+						deg:deg,
+						num:num
+					})
+					
+				},100)
+				
+//				动画生成
+				setInterval(function(){
+					ctx.clearRect(0,0,oc.width,oc.height);
+					
+					//平滑的修改
+					for(var i=0;i<arr.length;i++){
+						arr[i].deg+=3;
+						arr[i].x =arr[i].startX + (Math.sin(arr[i].deg*Math.PI/180))*arr[i].num;
+						arr[i].y = arr[i].startY - 0.5*(arr[i].deg*Math.PI/180)*arr[i].num*1.5;
+						if(arr[i].y<50){
+							arr.splice(i,1);
+						}
+					}
+					
+					
+					for(var i=0;i<arr.length;i++){
+						ctx.fillStyle="rgba("+arr[i].r+","+arr[i].g+","+arr[i].b+","+arr[i].a+")";
+						ctx.beginPath();
+						ctx.arc(arr[i].x,arr[i].y,arr[i].z,0,2*Math.PI);
+						ctx.fill();
+					}
+				},1000/60)
+				
+			}
+		}
+	</script>
+</html>
