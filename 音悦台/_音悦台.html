@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,minimum=1.0,maximum=1.0"/>
+		<title>音悦台</title>
+		<link rel="stylesheet" href="css/new_file.css"/>
+	</head>
+	<body>
+		<div id="index">
+			<div class="head">
+				<div class="headT">
+					<h1 class="logo">
+						<a href="javascript:;">
+							<img src="img/logo.png" alt="老子是logo" />
+						</a>
+					</h1>
+					<!--面包导航-->
+					<a href="javascript:;"  class="menuBtn menuBtnClose"></a>
+					<!--按钮排-->
+					<div class="btns">
+						<a href="javascript:;">搜索</a>
+						<a href="javascript:;">登录</a>
+						<a href="javascript:;">注册</a>
+					</div>
+				</div>
+				<form  class="search">
+					<input type="text" placeholder="新世界" />
+					<input type="submit" value="搜索"/>
+				</form>
+				<ul class="mask">
+					<li>
+						<a href="javascript:;">首页</a>
+					</li>
+					<li>
+						<a href="javascript:;">MV</a>
+					</li>
+					<li>
+						<a href="javascript:;">乐单</a>
+					</li>
+					<li>
+						<a href="javascript:;">V榜</a>
+					</li>
+					<li>
+						<a href="javascript:;">音乐</a>
+					</li>
+					<li>
+						<a href="javascript:;">商城</a>
+					</li>
+					<li>
+						<a href="javascript:;">节目</a>
+					</li>
+					<li>
+						<a href="javascript:;">饭团</a>
+					</li>
+					<li>
+						<a href="javascript:;">热门应用</a>
+					</li>
+					<li>
+						<a href="javascript:;">咨询</a>
+					</li>
+					<li>
+						<a href="javascript:;">我的家</a>
+					</li>
+					<li>
+						<a href="javascript:;">APP下载</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+	<script src="charles.js"></script>
+	<script src="tools.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("touchstart",function(ev){
+			ev=ev||event;
+			ev.preventDefault();
+			
+		});
+		(function(){
+			var styleNode = document.createElement("style");
+			var width = document.documentElement.clientWidth/16;
+			styleNode.innerHTML = "html{font-size:"+ width +"px!important}";
+			document.head.appendChild(styleNode);
+		})();
+		
+		
+		window.onload=function(){
+			//头部菜单切换
+			headTap();
+			function headTap(){
+				var menu = document.querySelector("#index .head .headT .menuBtn");
+				var mask = document.querySelector("#index .head .mask");
+				var flag = false;
+				
+				menu.addEventListener("touchstart",function(ev){
+					ev=ev||event;
+					if(flag){
+						tools.addClass(this,"menuBtnClose");
+						tools.removeClass(this,"menuBtnShow");
+						mask.style.display = "none";
+					}else{
+						tools.addClass(this,"menuBtnShow");
+						tools.removeClass(this,"menuBtnClose");
+						mask.style.display = "block";
+					}
+					flag=!flag;
+					ev.stopPropagation();
+					ev.preventDefault();
+				})
+				
+				document.addEventListener("touchstart",function(ev){
+					if(flag){
+						tools.addClass(menuBtn,"menuBtnClose");
+						tools.removeClass(menuBtn,"menuBtnShow");
+						mask.style.display="none";
+						flag=!flag;
+					}
+				})
+				
+				mask.addEventListener("touchstart",function(ev){
+					ev=ev||event;
+					ev.stopPropagation();
+					ev.preventDefault();
+				})
+			}
+			
+			//文本框的失获焦
+			changeFocus();
+			function changeFocus(){
+				var inputText = document.querySelector("#index .head .search input[type='text']");
+				inputText.addEventListener("touchstart",function(ev){
+					ev=ev||event;
+					this.focus();
+					if(!this.hasFocus){
+						this.hasFocus=true;
+					}
+					ev.stopPropagation();
+					ev.preventDefault();
+				})
+				
+				document.addEventListener("touchstart",function(ev){
+					if(inputText.hasFocus){
+						inputText.blur();
+						inputText.hasFocus=false;
+					}
+				})
+			}	
+		}
+	</script>
+</html>
