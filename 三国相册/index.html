@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalabel=no,minimum-scale=1.0,maximum-sacle=1.0"/>-->
+		<meta  name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no" />
+		<title>三国相册</title>
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			html,body{
+				height: 100%;
+				overflow: hidden;
+			}
+			ul{
+				list-style: none;
+			}
+			img{
+				display: block;
+			}
+			header{
+				height: 2rem;
+				font: 1rem/2rem "宋体",helvetica;
+				background: rgba(0,0,0,.8);
+				color: #FFFFFF;
+				text-align: center;
+			}
+			#wrap{
+				position: absolute;
+				top: 2rem;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				overflow: hidden;
+			}
+			#wrap .list {
+				overflow: hidden;
+			}
+			#wrap .list li{
+				float: left;
+				width: 7rem;
+				height: 7rem;
+				margin: .5rem;
+				background: url(img/loadingImg.gif) no-repeat;
+				background-position:center ;
+			}
+		 	#wrap .list li img{
+				width: 100%;
+				border-radius:15px;
+				opacity: 0;
+				transition:.5s opacity ;
+			}
+			footer{
+				position: absolute;
+				width: 100%;
+				text-align: center;
+				font: 1rem/3rem "宋体";				
+			}
+		</style>
+	</head>
+	<body>
+		<header>三国相册</header>
+		<section id="wrap">
+			<div class="content">
+				<ul class="list"></ul>
+				<footer>向上拉加载更多</footer>
+			</div>
+		</section>
+	</body>
+	<script src="charles.js"></script>
+	<script type="text/javascript">
+		document.addEventListener("touchstart",function(ev){
+			ev=ev||event;
+			ev.preventDefault();
+		});
+		(function(){
+			var styleNode = document.createElement("style");
+			var width = document.documentElement.clientWidth/16;
+			styleNode.innerHTML = "html{font-size:"+width+"px !important}";
+			document.head.appendChild(styleNode);
+		})();
+		
+		window.onload = function(){
+			var wrap = document.querySelector("#wrap");
+			var list = document.querySelector("#wrap .list");
+			var head = document.querySelector("header");
+			var minT = head.offsetHeight;
+			var maxT = document.documentElement.clientHeight;
+			var liNodes = document.getElementsByTagName("li");
+			
+			
+			var footer = document.querySelector("footer");
+			charles.css(footer,"scale",0);
+			var content = document.querySelector("#wrap .content");
+			var maxScroll = wrap.clientHeight - content.offsetHeight;
+			var isBottom = false;
+			
+			
+			var urlArr = [];
+			for(var i=0;i<40;i++){
+				urlArr.push("img/"+(i%18+1)+".jpg");
+			}
+			var length = 12;
+			var start = 0;
+			var end = 0;
+			
+			var onlyOne = true;
+			creatLi();
+			function creatLi(){
+				
+				if(start>=urlArr.length){
+					if(onlyOne){
+						onlyOne=false;
+						footer.innerHTML="已经没有了";
+						setTimeout(function(){
+							footer.innerHTML="";
+							content.style.transition=".5s";
+							charles.css(content,"translateY",maxScroll);
+							//将footer置回零
+							charles.css(footer,"scale",0);
+						},2000);
+						
+						return;
+					}
+				}
+				charles.css(footer,"scale",0);
+				end = start + length;
+				end = end>urlArr.length?urlArr.length:end;
+				for(var i=start;i<end;i++){
+					var liNode = document.createElement("li");
+					liNode.src = urlArr[i];
+					list.appendChild(liNode);
+				}
+				start = end;
+				
+				
+				lazyLoad();
+			}
+			
+			function lazyLoad(){
+				for(var i=0;i<liNodes.length;i++){
+					var t = liNodes[i].getBoundingClientRect().top;
+						if(minT<t&&t<maxT&&!liNodes[i].isLoad){
+							liNodes[i].isLoad = true;
+							creatImg(liNodes[i]);
+						}
+					}
+			}
+			
+			function creatImg(li){
+				var img = new Image();
+				img.src = li.src;
+				li.appendChild(img);
+				img.onload = function(){
+					setTimeout(function(){
+						img.style.opacity = 1;
+					},20)
+				}
+				
+			}
+			
+			var callBack = {
+				start:function(){
+					if(!onlyOne){
+						return;
+					}
+					maxScroll = wrap.clientHeight - content.offsetHeight;
+					if(charles.css(content,"translateY") <= maxScroll){
+						isBottom = true;
+					}else{
+						isBottom = false;
+					}
+				},
+				move:function(){
+					if(!onlyOne){
+						return;
+					}
+					lazyLoad();
+					var disY = charles.css(content,"translateY") - maxScroll;
+					if(isBottom&&disY<=0){
+						var over = -disY;
+						var scale = over/footer.offsetHeight;
+						scale = scale>1?1:scale;
+						charles.css(footer,"scale",scale);
+					}
+					
+				},
+				end:function(){
+					if(!onlyOne){
+						return;
+					}
+					
+					var disY = charles.css(content,"translateY") - maxScroll;
+					if(isBottom&&disY<=0){
+						//橡皮筋效果拖出来的距离
+						var over = -disY;
+						var scale = over / footer.offsetHeight;
+						scale =scale>1?1:scale;
+						
+						if(scale>=1){
+							
+							clearInterval(this.clearTime);
+							//加载下一组li
+							creatLi();
+						}
+					}
+				}
+			}
+			
+			charles.vMove(wrap,callBack);
+		}
+		
+	</script>
+</html>
